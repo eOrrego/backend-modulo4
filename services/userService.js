@@ -1,16 +1,15 @@
 const User = require('../models/UserModel');
 
 const userService = {
-  findAll: async () => {
-    return await User.find();
+  findAll: async (filter) => {
+    return await User.find(filter);
   },
   saveUser: async (user) => {
     const newUser = new User(user);
-    await newUser.save();
+    return await newUser.save();
   },
   find: async (data) => {
-    console.log(data);
-    await User.find({email: data})
+    return await User.find({email: data})
   }
 };
 

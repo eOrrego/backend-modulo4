@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongoose").Types;
 const { userService } = require('../services/userService');
 const { encryptedData, compareData } = require('../utils/bcryptService');
 const { token } = require('../utils/jwtService');
@@ -5,7 +6,7 @@ const User = require('../models/UserModel');
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await userService.findAll();
+    const users = await userService.findAll({isDeleted: false});
     res.status(200).json(users);
   } catch (error) {
     console.log(error);
@@ -23,13 +24,14 @@ const createUser = async (req, res) => {
       password: encryptPass,
       isActive: true,
     }
-    await userService.saveUser(userSave);
-    res.status(201).json('The user was created successfully');
+    const newUser = await userService.saveUser(userSave);
+    const JwtToken = token({id: newUser._id, role: newUser.role});
+    return res.status(201).json(JwtToken);
   } catch (e) {
     if (e.code === 11000) {
       return res.status(409).json('This email has already been registered');
     }
-    res.status(500).json('Internal Server Error');
+    return res.status(500).json('Internal Server Error');
   }
 };
 
@@ -37,7 +39,6 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    // const foundUser = await userService.find(email);
     const foundUser = await User.findOne({email})
     if (!foundUser) {
       return res.status(404).json('User not found');
@@ -47,15 +48,83 @@ const login = async (req, res) => {
       return res.status(400).json('Invalid Credentials');
     }
     const JwtToken = token({id: foundUser._id, role: foundUser.role});
-    res.status(200). json(JwtToken);
+    res.status(200).json(JwtToken);
   } catch (error) {
     console.log(error);
     res.status(500).json('Internal Server Error');
   }
 }
 
+//Eliminar el Usuario
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  const todayDate = new Date();
+  const deleteStatus = {
+    deletedAt: todayDate,
+    isDeleted: true,
+    isActive: false,
+  }
+  try {
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json("ObjectId is not valid");
+    }
+    const deleteUser = await User.findOneAndUpdate({_id: id }, deleteStatus);
+    if (deleteUser) {
+      res.status(200).json(`The user: ${deleteUser._id} was successfully deleted`);
+    } else {
+      res.status(404).json("User not found");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Internal Server Error');
+  }
+}
+
+//Traer un solo usuario
+const getOneUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json("ObjectId is not valid");
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json("User not found");
+    } else {
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Internal Server Error');
+  }
+}
+
+//Editar un usuario
+const updateUser = async (req, res) => {
+  const { body } = req;
+  const { id } = req.params;
+  try {
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json("ObjectId is not valid");
+    }
+    const updateUser = await User.findOneAndUpdate({_id: id }, body, { new: true });
+    if (updateUser) {
+      res.status(200).json(updateUser);
+    } else {
+      res.status(404).json("User not found");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Internal Server Error');
+  }
+}
+
+
 module.exports = {
   getAllUsers,
   createUser,
   login,
+  deleteUser,
+  getOneUser,
+  updateUser,
 };

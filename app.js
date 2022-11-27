@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const dbConnect = require('./config/db');
 const userRoutes = require('./routes/users');
+const productRoutes = require('./routes/products')
 dotenv.config();
 const app = express();
 
@@ -32,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', userRoutes);
-
-
+app.use('/api', productRoutes);
 
 module.exports = app;

@@ -22,6 +22,11 @@ const userSchema = new Schema({
     default: roles.CLIENTE,
   },
   isActive: Boolean,
+  deletedAt: Date,
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 },
 {
   timestamps: true,
