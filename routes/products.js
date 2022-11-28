@@ -1,4 +1,3 @@
-const { Router } = require('express');
 const express = require('express');
 const router = express.Router();
 const { roles } = require('../constants/enum');
@@ -7,7 +6,7 @@ const { isLoggedIn, checkRole } = require('../middleware/auth');
 
 router.get('/products',isLoggedIn,getAllProducts);
 router.get('/product/:id',isLoggedIn,getOneProduct);
-router.post('/product',checkRole(roles.ADMIN), createProduct);
+router.post('/createProduct',checkRole(roles.ADMIN), createProduct);
 router.put('/product/:id',checkRole(roles.ADMIN),updateProduct);
 router.delete('/product/:id',checkRole(roles.ADMIN),deleteProduct);
 

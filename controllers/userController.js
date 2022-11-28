@@ -43,8 +43,10 @@ const login = async (req, res) => {
     if (!foundUser) {
       return res.status(404).json('User not found');
     }
+    console.log(password,foundUser.password);
     const correctPassword = await compareData(password, foundUser.password);
     if (!correctPassword) {
+      console.log("HOLA");
       return res.status(400).json('Invalid Credentials');
     }
     const JwtToken = token({id: foundUser._id, role: foundUser.role});
