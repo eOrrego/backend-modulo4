@@ -10,6 +10,7 @@ const isLoggedIn = async (req, res, next) => {
     const decodeToken = verifiedToken(token);
     const userFound = await User.findById(decodeToken.id);
     if (!userFound) res.status(401).json('Unauthorized');
+    if(!userFound.isActive) res.status(403).json('Not verfied account');
     next();
   } catch (error) {
     console.error(error.message);
