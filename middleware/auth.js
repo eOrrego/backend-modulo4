@@ -4,7 +4,7 @@ const { getTokenToHeader, verifiedToken } = require('../utils/jwtService');
 const isLoggedIn = async (req, res, next) => {
   const token = getTokenToHeader(req);
   if (!token) {
-    res.status(401).json('Unauthorized');
+    return res.status(401).json('Unauthorized');
   }
   try {
     const decodeToken = verifiedToken(token);
