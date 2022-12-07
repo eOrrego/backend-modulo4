@@ -7,6 +7,7 @@ const isLoggedIn = async (req, res, next) => {
     return res.status(401).json('Unauthorized');
   }
   try {
+    console.log("TOKEN",token);
     const decodeToken = verifiedToken(token);
     const userFound = await User.findById(decodeToken.id);
     if (!userFound) res.status(401).json('Unauthorized');
