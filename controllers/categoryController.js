@@ -3,7 +3,7 @@ const Category = require("../models/CategoryModel");
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find({ isDeleted: false });
+    const categories = await Category.find({ isDeleted: false }).populate('products');
     res.status(200).json(categories);
   } catch (error) {
     console.log(error);
@@ -18,7 +18,7 @@ const getOneCategory = async (req, res) => {
     if (!ObjectId.isValid(id)) {
       return res.status(400).json("Id is not valid");
     }
-    const category = await Category.findById(id);
+    const category = await Category.findById(id).populate('products');
     if (!category) {
       return res.status(404).json("category not found");
     } else {
