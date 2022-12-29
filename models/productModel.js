@@ -25,6 +25,7 @@ const productSchema = new Schema(
     description: {
       type: String,
     },
+    categories: { type: Schema.Types.ObjectId, ref: 'categories' },
     isActive: Boolean,
     deletedAt: Date,
     isDeleted: {

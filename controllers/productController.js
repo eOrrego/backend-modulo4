@@ -19,7 +19,7 @@ const getOneProduct = async (req, res) => {
     if (!ObjectId.isValid(id)) {
       return res.status(400).json("Id is not valid");
     }
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate('categories');
     if (!product) {
       return res.status(404).json("product not found");
     } else {

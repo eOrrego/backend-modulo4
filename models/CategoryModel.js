@@ -6,8 +6,10 @@ const categorySchema = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     products: [{ type: Schema.Types.ObjectId, ref: 'products' }],
+    isActive: Boolean,
     deletedAt: Date,
     isDeleted: {
       type: Boolean,

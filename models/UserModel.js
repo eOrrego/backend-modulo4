@@ -24,7 +24,10 @@ const userSchema = new Schema({
     enum: roles,
     default: roles.CLIENTE,
   },
-  isActive: Boolean,
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
   deletedAt: Date,
   isDeleted: {
     type: Boolean,
