@@ -1,0 +1,24 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const pedidoSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    products: [{ type: Schema.Types.ObjectId, ref: 'products' }],
+    isActive: Boolean,
+    deletedAt: Date,
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
+module.exports = mongoose.model("pedidos", pedidoSchema);
