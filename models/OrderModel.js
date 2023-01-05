@@ -5,10 +5,6 @@ const orderSchema = new Schema(
   {
     users: [{ type: Schema.Types.ObjectId, ref: 'users' }],
     products: [{ type: Schema.Types.ObjectId, ref: 'products' }],
-    price: {
-      type: Number,
-      required: true,
-    },
     total: {
       type: Number,
       required: true,
