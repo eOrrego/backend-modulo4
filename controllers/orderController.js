@@ -11,48 +11,48 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-const getOneCategory = async (req, res) => {
+const getOneOrder = async (req, res) => {
   const id = req.params.id;
 
   try {
     if (!ObjectId.isValid(id)) {
       return res.status(400).json("Id is not valid");
     }
-    const category = await Category.findById(id).populate('products');
-    if (!category) {
-      return res.status(404).json("category not found");
+    const order = await Order.findById(id).populate('products');
+    if (!order) {
+      return res.status(404).json("order not found");
     } else {
-      res.status(200).json(category);
+      res.status(200).json(order);
     }
   } catch (error) {}
 };
 
-const createCategory = async (req, res) => {
-  const categorySave = { ...req.body, isActive: true };
+const createOrder = async (req, res) => {
+  const orderSave = { ...req.body, isActive: true };
   try {
-    const category = new Category(categorySave);
-    await category.save();
-    return res.status(201).json(category);
+    const order = new Order(orderSave);
+    await order.save();
+    return res.status(201).json(order);
   } catch (error) {
     console.log(error);
     res.status(500).json("Internal Server Error");
   }
 };
 
-const updateCategory = async (req, res) => {
-    const bodyCategory = req.body;
+const updateOrder = async (req, res) => {
+    const bodyOrder = req.body;
     const id = req.params.id;
   try {
     
     if (!ObjectId.isValid(id)) {
       return res.status(400).json("ObjectId is not valid");
     }
-    const updateCategory = await Category.findOneAndUpdate({_id: id},bodyCategory,{ new: true })
+    const updateOrder = await Order.findOneAndUpdate({_id: id},bodyOrder,{ new: true })
 
-    if (updateCategory) {
-        res.status(200).json(updateCategory);
+    if (updateOrder) {
+        res.status(200).json(updateOrder);
       } else {
-        res.status(404).json("Category not found");
+        res.status(404).json("Order not found");
       }
   } catch (error) {
     console.log(error);
@@ -60,7 +60,7 @@ const updateCategory = async (req, res) => {
   }
 };
 
-const deleteCategory = async (req, res) => {
+const deleteOrder = async (req, res) => {
     const id = req.params.id;
     const deleteStatus = {
         deletedAt: new Date(),
@@ -71,12 +71,12 @@ const deleteCategory = async (req, res) => {
     if (!ObjectId.isValid(id)) {
       return res.status(400).json("ObjectId is not valid");
     }
-    const deleteCategory = await Category.findOneAndUpdate({_id: id},deleteStatus,{ new: true })
+    const deleteOrder = await Order.findOneAndUpdate({_id: id},deleteStatus,{ new: true })
 
-    if (deleteCategory) {
-        res.status(200).json(`Category deleted = ${deleteCategory.name}`);
+    if (deleteOrder) {
+        res.status(200).json(`Order deleted = ${deleteOrder.name}`);
       } else {
-        res.status(404).json("Category not found");
+        res.status(404).json("Order not found");
       }
   } catch (error) {
     console.log(error);
