@@ -8,6 +8,7 @@ const dbConnect = require('./config/db');
 const userRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
 const categoriesRoutes = require('./routes/categories');
+const ordersRoutes = require('./routes/orders');
 dotenv.config();
 const app = express();
 
@@ -36,5 +37,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', userRoutes);
 app.use('/api', productRoutes);
 app.use('/api', categoriesRoutes);
+app.use('/api', ordersRoutes);
 
 module.exports = app;
