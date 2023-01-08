@@ -7,7 +7,7 @@ const {
   createOrder,
   updateOrder,
   deleteOrder,
-} = require('../controllers/orderController');// TODO: revisar por que no existe
+} = require('../controllers/orderController');
 const { isLoggedIn, checkRole } = require('../middleware/auth');
 
 router.get('/orders', isLoggedIn, getAllOrders);

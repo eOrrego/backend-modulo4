@@ -24,7 +24,10 @@ const getOneCategory = async (req, res) => {
     } else {
       res.status(200).json(category);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json("Internal Server Error");
+  }
 };
 
 const createCategory = async (req, res) => {
@@ -65,6 +68,7 @@ const deleteCategory = async (req, res) => {
     const deleteStatus = {
         deletedAt: new Date(),
         isDeleted: true,
+        isActive: false
       }
   try {
     
